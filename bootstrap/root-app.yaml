@@ -1,0 +1,31 @@
+# Applied once by hand after `helm install` of Argo CD. It deploys everything in argocd/
+# (the AppProjects and the `platform` app-of-apps). Runs in the built-in `default`
+# project because the other projects do not exist yet at this point.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bootstrap
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+    targetRevision: main
+    path: argocd
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - ServerSideApply=true
