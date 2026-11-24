@@ -1,0 +1,15 @@
+{{- if eq .Values.mode "service" }}
+{{- if and .Values.podDisruptionBudget.enabled (ge (int .Values.replicaCount) 2) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "growpath.fullname" . }}
+  labels:
+    {{- include "growpath.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "growpath.selectorLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

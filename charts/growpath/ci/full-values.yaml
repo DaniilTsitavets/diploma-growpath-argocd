@@ -1,0 +1,33 @@
+image:
+  repository: registry.example.com/growpath/example
+  tag: "0000000000000000000000000000000000000000"
+
+env:
+  EXAMPLE_LOG_LEVEL: INFO
+  EXAMPLE_FEATURE_FLAG: true
+  EXAMPLE_PAGE_SIZE: 50
+
+externalSecret:
+  key: growpath/example
+
+migration:
+  commands:
+    - alembic upgrade head
+    - python -m app.seed
+
+ingress:
+  enabled: true
+  groupOrder: 10
+  securityGroups: sg-00000000000000000
+  paths:
+    - path: /v1/items
+      pathType: Prefix
+    - path: /v1/me
+      pathType: Exact
+
+serviceMonitor:
+  enabled: true
+
+otel:
+  enabled: true
+  endpoint: http://collector.example.svc:4317
