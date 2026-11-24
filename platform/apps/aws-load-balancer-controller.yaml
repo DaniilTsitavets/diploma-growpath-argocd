@@ -4,8 +4,8 @@ metadata:
   name: aws-load-balancer-controller
   namespace: argocd
   annotations:
-    # Its webhooks fail closed for every Service and Ingress, so LBC must be healthy before
-    # anything that creates those (ESO, Reloader, observability, services).
+    # The Ingress webhook fails closed, so LBC must be healthy before anything that creates
+    # Ingresses (Argo CD UI, Grafana, services). Needs cert-manager, which runs outside GitOps.
     argocd.argoproj.io/sync-wave: "4"
 spec:
   project: platform
@@ -23,24 +23,6 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
-  # The chart generates the webhook CA and certificate on every render (genCA), so Argo would see a
-  # permanent diff and rotate them. Keep whatever was created on the first sync.
-  ignoreDifferences:
-    - group: ""
-      kind: Secret
-      name: aws-load-balancer-tls
-      jsonPointers:
-        - /data
-    - group: admissionregistration.k8s.io
-      kind: MutatingWebhookConfiguration
-      name: aws-load-balancer-webhook
-      jqPathExpressions:
-        - .webhooks[]?.clientConfig.caBundle
-    - group: admissionregistration.k8s.io
-      kind: ValidatingWebhookConfiguration
-      name: aws-load-balancer-webhook
-      jqPathExpressions:
-        - .webhooks[]?.clientConfig.caBundle
   syncPolicy:
     automated:
       prune: true
@@ -53,4 +35,3 @@ spec:
         maxDuration: 3m
     syncOptions:
       - ServerSideApply=true
-      - RespectIgnoreDifferences=true

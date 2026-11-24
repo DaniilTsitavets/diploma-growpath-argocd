@@ -39,6 +39,13 @@ topologySpreadConstraints:
         app.kubernetes.io/name: aws-load-balancer-controller
         app.kubernetes.io/instance: aws-load-balancer-controller
 
+# Webhook certificates come from cert-manager (installed by Terraform as a cluster add-on), not from
+# genCA in the template, which would differ on every render and keep the app OutOfSync.
+enableCertManager: true
+
+# Without the Service mutator the webhook that fails closed for every Service is gone.
+enableServiceMutatorWebhook: false
+
 # No WAF or Shield on the ALBs; false stops the controller from probing those APIs.
 enableShield: false
 enableWaf: false
