@@ -22,6 +22,13 @@ dex:
 notifications:
   enabled: false
 
+configs:
+  cm:
+    url: https://argocd.growpath.social
+  params:
+    # TLS ends at the ALB, so the server speaks plain HTTP behind it.
+    server.insecure: true
+
 controller:
   replicas: 1
   resources:
@@ -48,6 +55,25 @@ server:
       memory: 128Mi
     limits:
       memory: 256Mi
+
+  # Internal ALB (group admin-tools, shared with Grafana later), reachable only through Tailscale.
+  # The host rule is enough for the certificate: LBC discovers the ACM certificate by host name, and
+  # ExternalDNS (EKS add-on) creates the Route 53 record from the same host.
+  ingress:
+    enabled: true
+    ingressClassName: alb
+    hostname: argocd.growpath.social
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internal
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/group.name: admin-tools
+      alb.ingress.kubernetes.io/tags: ingress-name=admin-tools
+      alb.ingress.kubernetes.io/security-groups: sg-0f505ddbccbd8ce84
+      alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+      alb.ingress.kubernetes.io/healthcheck-path: /healthz
 
 applicationSet:
   replicas: 1
