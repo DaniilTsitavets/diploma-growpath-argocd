@@ -1,0 +1,25 @@
+image:
+  repository: <PROD_ACCOUNT_ID>.dkr.ecr.eu-north-1.amazonaws.com/growpath/expert-consultation
+  tag: "0000000000000000000000000000000000000000"
+
+env:
+  EXPERT_CONSULTATION_AWS_REGION: eu-north-1
+  EXPERT_CONSULTATION_LOG_LEVEL: INFO
+  EXPERT_CONSULTATION_ESCALATION_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/expert-escalation-requested
+  EXPERT_CONSULTATION_TICKET_EVENTS_TOPIC_ARN: arn:aws:sns:eu-north-1:<PROD_ACCOUNT_ID>:ticket-events
+  EXPERT_CONSULTATION_COGNITO_USER_POOL_ID: <COGNITO_USER_POOL_ID>
+  EXPERT_CONSULTATION_PHOTOS_BUCKET: <PHOTOS_BUCKET>
+
+externalSecret:
+  key: growpath/expert-consultation
+
+ingress:
+  enabled: true
+  groupOrder: 30
+  paths:
+    - path: /v1/expert/tickets
+      pathType: Prefix
+    - path: /v1/me
+      pathType: Exact
+    - path: /v1/admin/users
+      pathType: Prefix
