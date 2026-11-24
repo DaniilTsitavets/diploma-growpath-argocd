@@ -4,22 +4,7 @@ image:
 
 env:
   COMMERCE_AWS_REGION: eu-north-1
-  COMMERCE_LOG_LEVEL: INFO
   COMMERCE_ORDER_PLACED_TOPIC_ARN: arn:aws:sns:eu-north-1:<PROD_ACCOUNT_ID>:order-placed
 
 externalSecret:
   key: growpath/commerce
-
-migration:
-  commands:
-    - alembic upgrade head
-    - python -m app.seed
-
-ingress:
-  enabled: true
-  groupOrder: 10
-  paths:
-    - path: /v1/items
-      pathType: Prefix
-    - path: /v1/orders
-      pathType: Exact

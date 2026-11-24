@@ -1,0 +1,16 @@
+env:
+  COMMERCE_LOG_LEVEL: INFO
+
+migration:
+  commands:
+    - alembic upgrade head
+    - python -m app.seed
+
+ingress:
+  enabled: true
+  groupOrder: 10
+  paths:
+    - path: /v1/items
+      pathType: Prefix
+    - path: /v1/orders
+      pathType: Exact
