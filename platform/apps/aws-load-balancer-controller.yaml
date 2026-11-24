@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  annotations:
+    # The Ingress webhook fails closed, so LBC must be healthy before anything that creates
+    # Ingresses (Argo CD UI, Grafana, services). Needs cert-manager, which runs outside GitOps.
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: platform
+  sources:
+    - repoURL: https://aws.github.io/eks-charts
+      chart: aws-load-balancer-controller
+      targetRevision: 3.6.3
+      helm:
+        releaseName: aws-load-balancer-controller
+        valueFiles:
+          - $values/platform/values/aws-load-balancer-controller.yaml
+    - repoURL: https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - ServerSideApply=true

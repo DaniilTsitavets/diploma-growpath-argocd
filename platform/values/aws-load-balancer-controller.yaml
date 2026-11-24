@@ -1,0 +1,52 @@
+# Values for the aws-load-balancer-controller chart (https://aws.github.io/eks-charts 3.6.3).
+# Runs on the managed `system` group. IAM comes from Pod Identity (kube-system/aws-load-balancer-controller,
+# set up in Terraform), so the ServiceAccount has no role-arn annotation.
+clusterName: growpath
+region: eu-north-1
+# Not a secret. Pods cannot read IMDS (hop limit 1), so the VPC id has to be given explicitly.
+vpcId: vpc-07d0ab5b7b5e9d3c5
+
+replicaCount: 2
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+
+nodeSelector:
+  karpenter.sh/controller: "true"
+
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+
+# Estimates, to be measured after the first deploy.
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+podDisruptionBudget:
+  maxUnavailable: 1
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: aws-load-balancer-controller
+        app.kubernetes.io/instance: aws-load-balancer-controller
+
+# Webhook certificates come from cert-manager (installed by Terraform as a cluster add-on), not from
+# genCA in the template, which would differ on every render and keep the app OutOfSync.
+enableCertManager: true
+
+# Without the Service mutator the webhook that fails closed for every Service is gone.
+enableServiceMutatorWebhook: false
+
+# No WAF or Shield on the ALBs; false stops the controller from probing those APIs.
+enableShield: false
+enableWaf: false
+enableWafv2: false
