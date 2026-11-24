@@ -1,5 +1,5 @@
 # Project for Argo CD's own control objects (the platform app-of-apps). It can only create Argo CD
-# objects in the argocd namespace and nothing cluster-scoped.
+# objects in the argocd namespace, plus the Namespaces declared in platform/namespaces.
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -14,7 +14,10 @@ spec:
   destinations:
     - server: https://kubernetes.default.svc
       namespace: argocd
-  clusterResourceWhitelist: []
+  # Only this project may create Namespaces (platform/namespaces); platform Applications cannot.
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
   namespaceResourceWhitelist:
     - group: argoproj.io
       kind: Application
