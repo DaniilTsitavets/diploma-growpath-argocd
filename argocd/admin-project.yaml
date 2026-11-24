@@ -1,0 +1,22 @@
+# Project for Argo CD's own control objects (the platform app-of-apps). It can only create Argo CD
+# objects in the argocd namespace and nothing cluster-scoped.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: admin
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: Argo CD control objects (platform app-of-apps)
+  sourceRepos:
+    - https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: argocd
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: ApplicationSet

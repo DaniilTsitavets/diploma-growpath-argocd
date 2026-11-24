@@ -1,0 +1,25 @@
+# Argo CD ships a wide-open `default` project. The bootstrap Application still has to live in it
+# (the other projects do not exist yet when it is applied by hand), so it is locked down here
+# to what bootstrap needs: this repo, the argocd namespace, Argo CD objects only.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: Locked down; used only by the bootstrap Application
+  sourceRepos:
+    - https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: argocd
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: AppProject
+    - group: argoproj.io
+      kind: ApplicationSet

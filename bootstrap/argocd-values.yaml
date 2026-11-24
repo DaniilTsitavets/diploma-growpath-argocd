@@ -1,0 +1,67 @@
+# Values for the argo-cd chart (argoproj/argo-helm 10.19.0, Argo CD v3.6.2).
+# Applied once by hand: helm install argocd argo/argo-cd -n argocd --create-namespace \
+#   --version 10.19.0 -f bootstrap/argocd-values.yaml
+# After the first install Argo CD manages itself: platform/apps/argocd.yaml reuses this file,
+# so the manual install and the self-managed release must use the same chart version and values.
+# Everything runs on the `system` managed node group (taint CriticalAddonsOnly,
+# label karpenter.sh/controller=true). Resource numbers are estimates, not measurements.
+
+global:
+  # No NetworkPolicy for now (author's decision); the chart default would create default-deny ones.
+  networkPolicy:
+    create: false
+  nodeSelector:
+    karpenter.sh/controller: "true"
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+
+dex:
+  enabled: false
+
+notifications:
+  enabled: false
+
+controller:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
+
+repoServer:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+
+server:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+applicationSet:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+redis:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
