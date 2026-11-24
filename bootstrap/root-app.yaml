@@ -1,6 +1,4 @@
-# Applied once by hand after `helm install` of Argo CD. It deploys everything in argocd/
-# (the AppProjects and the `platform` app-of-apps). Runs in the built-in `default`
-# project because the other projects do not exist yet at this point.
+# Applied once by hand after installing Argo CD. Lives in `default` because the other projects do not exist yet.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

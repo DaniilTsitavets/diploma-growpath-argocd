@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-options: Prune=false
     argocd.argoproj.io/sync-wave: "0"
 spec:
-  # Floating alias: new AMIs roll out as drift. Pin a version here if that is unwanted.
+  # Floating alias: new AMIs roll out as drift.
   amiSelectorTerms:
     - alias: al2023@latest
   role: growpath-karpenter-node
@@ -16,8 +16,7 @@ spec:
   securityGroupSelectorTerms:
     - tags:
         karpenter.sh/discovery: growpath
-  # Karpenter cannot detect prefix delegation, so the pod limit is set by hand (the VPC CNI
-  # setting itself comes from Terraform). Without it nodes are capped by the ENI limit.
+  # Karpenter cannot detect prefix delegation; without maxPods the ENI limit applies.
   kubelet:
     maxPods: 110
   metadataOptions:

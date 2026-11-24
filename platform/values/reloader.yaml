@@ -1,0 +1,29 @@
+# Workloads opt in with reloader.stakater.com annotations on the Deployment.
+reloader:
+  # Annotation in the pod template instead of an injected env var; avoids drift in GitOps tools.
+  reloadStrategy: annotations
+  autoReloadAll: false
+  # Migration Jobs share the Secrets and must not be restarted.
+  ignoreJobs: true
+  ignoreCronJobs: true
+  logFormat: json
+  readOnlyRootFileSystem: true
+
+  deployment:
+    nodeSelector:
+      karpenter.sh/controller: "true"
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi

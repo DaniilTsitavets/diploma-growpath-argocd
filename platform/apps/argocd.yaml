@@ -1,5 +1,4 @@
-# Argo CD manages itself. Installed by hand once (bootstrap/), taken over here with the same
-# chart version and the same values file, so the first sync shows no diff.
+# Argo CD manages itself with the same chart version and values file as the manual install.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

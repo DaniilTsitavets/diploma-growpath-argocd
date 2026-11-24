@@ -1,5 +1,3 @@
-# Project for Argo CD's own control objects (the platform app-of-apps). It can only create Argo CD
-# objects in the argocd namespace and nothing cluster-scoped.
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:

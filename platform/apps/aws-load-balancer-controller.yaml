@@ -4,8 +4,7 @@ metadata:
   name: aws-load-balancer-controller
   namespace: argocd
   annotations:
-    # The Ingress webhook fails closed, so LBC must be healthy before anything that creates
-    # Ingresses (Argo CD UI, Grafana, services). Needs cert-manager, which runs outside GitOps.
+    # The Ingress webhook fails closed, so LBC must be healthy before anything creates an Ingress.
     argocd.argoproj.io/sync-wave: "40"
 spec:
   project: platform
@@ -35,5 +34,5 @@ spec:
         maxDuration: 3m
     syncOptions:
       - ServerSideApply=true
-      # IngressClassParams arrives in the same sync as its CRD, so the dry-run cannot find the kind yet.
+      # IngressClassParams arrives with its CRD; the dry-run cannot find the kind yet.
       - SkipDryRunOnMissingResource=true

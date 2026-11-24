@@ -16,8 +16,7 @@ spec:
         kind: EC2NodeClass
         name: default
       expireAfter: 720h
-      # Nothing lands here by accident: observability workloads opt in with a toleration
-      # (they come with the observability block, after the ARM image check).
+      # Only workloads that tolerate this taint are scheduled here.
       taints:
         - key: growpath/pool
           value: platform
