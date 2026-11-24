@@ -23,6 +23,11 @@ spec:
   # Cluster-scoped kinds that the platform charts create. Extend per step when a new chart
   # (LBC, ESO, Reloader, ...) brings its own cluster-scoped resources.
   clusterResourceWhitelist:
+    # CreateNamespace=true needs Namespace here. Names are listed one by one (Argo CD 3.6 supports `name`),
+    # so a platform Application cannot create or touch any other namespace. Add a name with its Application.
+    - group: ""
+      kind: Namespace
+      name: external-secrets
     - group: apiextensions.k8s.io
       kind: CustomResourceDefinition
     - group: rbac.authorization.k8s.io
