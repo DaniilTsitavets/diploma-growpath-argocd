@@ -1,0 +1,21 @@
+env:
+  PLANT_CARE_LOG_LEVEL: INFO
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 512Mi
+
+ingress:
+  enabled: true
+  groupOrder: 20
+  paths:
+    - path: /v1/plants
+      pathType: Prefix
+    - path: /v1/journals
+      pathType: Prefix
+    - path: /v1/updates
+      pathType: Prefix

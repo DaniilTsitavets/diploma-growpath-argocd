@@ -1,0 +1,9 @@
+env:
+  ENTITLEMENT_LOG_LEVEL: INFO
+
+ingress:
+  enabled: true
+  groupOrder: 40
+  paths:
+    - path: /v1/me/entitlement
+      pathType: Exact

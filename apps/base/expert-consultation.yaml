@@ -1,0 +1,13 @@
+env:
+  EXPERT_CONSULTATION_LOG_LEVEL: INFO
+
+ingress:
+  enabled: true
+  groupOrder: 30
+  paths:
+    - path: /v1/expert/tickets
+      pathType: Prefix
+    - path: /v1/me
+      pathType: Exact
+    - path: /v1/admin/users
+      pathType: Prefix

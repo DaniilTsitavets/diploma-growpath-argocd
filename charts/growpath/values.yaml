@@ -1,0 +1,129 @@
+mode: service
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+containerPort: 8000
+workingDir: ""
+command:
+  - uvicorn
+  - --factory
+  - app.main:create_app
+  - --host
+  - 0.0.0.0
+  - --port
+  - "8000"
+
+serviceAccount:
+  create: true
+  name: ""
+  automountToken: false
+
+env: {}
+
+externalSecret:
+  enabled: true
+  key: ""
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secrets-manager
+    kind: ClusterSecretStore
+
+reloader:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 256Mi
+
+probes:
+  startup:
+    path: /health/live
+    periodSeconds: 5
+    failureThreshold: 12
+  liveness:
+    path: /health/live
+    periodSeconds: 10
+    failureThreshold: 3
+  readiness:
+    path: /health/ready
+    periodSeconds: 10
+    failureThreshold: 3
+
+terminationGracePeriodSeconds: 30
+preStopSleepSeconds: 15
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+nodeSelector:
+  kubernetes.io/arch: amd64
+tolerations: []
+affinity: {}
+spread:
+  nodes: true
+  zones: true
+
+service:
+  port: 8000
+
+ingress:
+  enabled: false
+  className: alb
+  groupName: growpath
+  groupOrder: 0
+  securityGroups: ""
+  tags: ingress-name=growpath
+  healthcheckPath: /health/ready
+  paths: []
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+migration:
+  enabled: true
+  commands:
+    - alembic upgrade head
+  backoffLimit: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 256Mi
+
+serviceMonitor:
+  enabled: false
+  path: /metrics
+  interval: 30s
+
+
+job:
+  command: []
+  backoffLimit: 0
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 256Mi

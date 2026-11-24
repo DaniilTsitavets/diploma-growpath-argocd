@@ -1,0 +1,16 @@
+mode: job
+
+image:
+  repository: registry.example.com/growpath/example
+  tag: "0000000000000000000000000000000000000000"
+
+workingDir: /srv/services/example
+
+externalSecret:
+  key: growpath/example-job
+
+job:
+  command:
+    - python
+    - -m
+    - app.example_task
