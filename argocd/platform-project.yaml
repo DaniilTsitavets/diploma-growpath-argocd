@@ -4,19 +4,22 @@ metadata:
   name: platform
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "-10"
 spec:
   description: Platform components (Karpenter, Argo CD itself, later ESO, LBC, Reloader, observability)
   sourceRepos:
     - https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
     - https://argoproj.github.io/argo-helm
     - https://aws.github.io/eks-charts
+    - https://charts.external-secrets.io
     - public.ecr.aws/karpenter
   destinations:
     - server: https://kubernetes.default.svc
       namespace: argocd
     - server: https://kubernetes.default.svc
       namespace: kube-system
+    - server: https://kubernetes.default.svc
+      namespace: external-secrets
   # Cluster-scoped kinds that the platform charts create. Extend per step when a new chart
   # (LBC, ESO, Reloader, ...) brings its own cluster-scoped resources.
   clusterResourceWhitelist:
@@ -38,3 +41,5 @@ spec:
       kind: IngressClass
     - group: elbv2.k8s.aws
       kind: IngressClassParams
+    - group: external-secrets.io
+      kind: ClusterSecretStore

@@ -6,7 +6,7 @@ metadata:
   name: admin
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "-10"
 spec:
   description: Argo CD control objects (platform app-of-apps)
   sourceRepos:
