@@ -1,6 +1,4 @@
-# Argo CD ships a wide-open `default` project. The bootstrap Application still has to live in it
-# (the other projects do not exist yet when it is applied by hand), so it is locked down here
-# to what bootstrap needs: this repo, the argocd namespace, Argo CD objects only.
+# Locked down: used only by the bootstrap Application.
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:

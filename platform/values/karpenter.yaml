@@ -1,12 +1,9 @@
-# Values for the karpenter chart (oci://public.ecr.aws/karpenter/karpenter 1.15.3).
-# Karpenter must run on the managed `system` group, never on nodes it manages itself.
-# The chart default affinity already forbids karpenter.sh/nodepool nodes.
+# Karpenter must not run on nodes it manages, so it stays on the `system` group.
 settings:
   clusterName: growpath
   interruptionQueue: growpath-karpenter
 
-# Pod Identity: the name must match the Terraform association (kube-system/karpenter).
-# No eks.amazonaws.com/role-arn annotation.
+# The name must match the Pod Identity association (kube-system/karpenter).
 serviceAccount:
   create: true
   name: karpenter
@@ -20,7 +17,7 @@ tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
 
-# Chart default is 1 CPU / 1Gi. Estimates for a 2-node t4g.medium group, to be measured.
+# The chart default of 1 CPU / 1Gi is too much for the system nodes.
 controller:
   resources:
     requests:

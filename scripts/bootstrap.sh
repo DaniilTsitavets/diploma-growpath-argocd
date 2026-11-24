@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# One-shot Argo CD bootstrap for a freshly created cluster (needs Tailscale and AWS SSO login).
-# Safe to re-run: the Helm install is skipped when the release already exists.
+# Argo CD bootstrap for a new cluster (needs Tailscale and an AWS SSO login). Safe to re-run.
 #
 #   AWS_PROFILE=growpath-prod scripts/bootstrap.sh
 #
@@ -23,7 +22,7 @@ if [ "$UPDATE_KUBECONFIG" = "1" ]; then
   aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_REGION" >/dev/null
 fi
 
-# The chart version lives in Git so the manual install and the self-managed Application match.
+# Same version as the self-managed Application.
 VERSION="$(awk '/chart: argo-cd/{f=1} f && /targetRevision:/{print $2; exit}' "$ROOT/platform/apps/argocd.yaml")"
 [ -n "$VERSION" ] || { echo "cannot read argo-cd version from platform/apps/argocd.yaml" >&2; exit 1; }
 

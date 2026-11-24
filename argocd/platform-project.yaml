@@ -23,11 +23,8 @@ spec:
       namespace: external-secrets
     - server: https://kubernetes.default.svc
       namespace: reloader
-  # Cluster-scoped kinds that the platform charts create. Extend per step when a new chart
-  # (LBC, ESO, Reloader, ...) brings its own cluster-scoped resources.
   clusterResourceWhitelist:
-    # CreateNamespace=true needs Namespace here. Names are listed one by one (Argo CD 3.6 supports `name`),
-    # so a platform Application cannot create or touch any other namespace. Add a name with its Application.
+    # Required by CreateNamespace; names are listed one by one so no other namespace can be created.
     - group: ""
       kind: Namespace
       name: external-secrets

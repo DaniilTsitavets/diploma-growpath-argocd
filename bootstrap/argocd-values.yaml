@@ -1,13 +1,7 @@
-# Values for the argo-cd chart (argoproj/argo-helm 10.19.0, Argo CD v3.6.2).
-# Applied once by hand: helm install argocd argo/argo-cd -n argocd --create-namespace \
-#   --version 10.19.0 -f bootstrap/argocd-values.yaml
-# After the first install Argo CD manages itself: platform/apps/argocd.yaml reuses this file,
-# so the manual install and the self-managed release must use the same chart version and values.
-# Everything runs on the `system` managed node group (taint CriticalAddonsOnly,
-# label karpenter.sh/controller=true). Resource numbers are estimates, not measurements.
+# Used for the manual install and by platform/apps/argocd.yaml (self-managed); keep the chart version in sync.
 
 global:
-  # No NetworkPolicy for now (author's decision); the chart default would create default-deny ones.
+  # The chart default creates default-deny NetworkPolicies.
   networkPolicy:
     create: false
   nodeSelector:
@@ -56,9 +50,8 @@ server:
     limits:
       memory: 256Mi
 
-  # Internal ALB (group admin-tools, shared with Grafana later), reachable only through Tailscale.
-  # The host rule is enough for the certificate: LBC discovers the ACM certificate by host name, and
-  # ExternalDNS (EKS add-on) creates the Route 53 record from the same host.
+  # Internal ALB shared by the admin tools (group admin-tools). The ACM certificate is discovered by host
+  # and ExternalDNS creates the DNS record from the same host.
   ingress:
     enabled: true
     ingressClassName: alb

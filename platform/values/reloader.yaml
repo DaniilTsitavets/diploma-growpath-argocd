@@ -1,13 +1,9 @@
-# Values for the reloader chart (https://stakater.github.io/stakater-charts 2.2.21, Reloader v1.4.25).
-# Watches the whole cluster (author's choice, ClusterRole); a workload opts in with an annotation on its
-# Deployment (reloader.stakater.com/auto or secret.reloader.stakater.com/reload), set in the services chart.
+# Workloads opt in with reloader.stakater.com annotations on the Deployment.
 reloader:
-  # Writes reloader.stakater.com/last-reloaded-from into the pod template instead of injecting an env var;
-  # the Reloader docs recommend this mode for GitOps tools.
+  # Annotation in the pod template instead of an injected env var; avoids drift in GitOps tools.
   reloadStrategy: annotations
-  # Nothing is reloaded unless the workload asks for it.
   autoReloadAll: false
-  # Migration Jobs read the same ConfigMaps and Secrets and must not be restarted.
+  # Migration Jobs share the Secrets and must not be restarted.
   ignoreJobs: true
   ignoreCronJobs: true
   logFormat: json
@@ -19,15 +15,12 @@ reloader:
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
-    # The pod-level context (non-root, seccomp) is the chart default; the container level is added here
-    # to meet the `restricted` Pod Security profile.
     containerSecurityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       capabilities:
         drop:
           - ALL
-    # Estimates, to be measured after the first deploy.
     resources:
       requests:
         cpu: 10m

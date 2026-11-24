@@ -22,7 +22,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: reloader
   syncPolicy:
-    # Argo CD never deletes a namespace it generated; labels are applied from here. warn/audit only report.
+    # warn and audit only report, nothing is blocked.
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/warn: restricted
