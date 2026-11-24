@@ -333,41 +333,6 @@
         }
       }
     },
-    "otel": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "endpoint": {
-          "type": "string"
-        },
-        "protocol": {
-          "enum": [
-            "grpc",
-            "http/protobuf"
-          ]
-        }
-      },
-      "if": {
-        "properties": {
-          "enabled": {
-            "const": true
-          }
-        }
-      },
-      "then": {
-        "required": [
-          "endpoint"
-        ],
-        "properties": {
-          "endpoint": {
-            "minLength": 1
-          }
-        }
-      }
-    },
     "mode": {
       "enum": [
         "service",

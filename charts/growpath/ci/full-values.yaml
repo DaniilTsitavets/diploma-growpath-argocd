@@ -27,7 +27,3 @@ ingress:
 
 serviceMonitor:
   enabled: true
-
-otel:
-  enabled: true
-  endpoint: http://collector.example.svc:4317

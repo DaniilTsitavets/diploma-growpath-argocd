@@ -116,10 +116,6 @@ serviceMonitor:
   path: /metrics
   interval: 30s
 
-otel:
-  enabled: false
-  endpoint: ""
-  protocol: grpc
 
 job:
   command: []

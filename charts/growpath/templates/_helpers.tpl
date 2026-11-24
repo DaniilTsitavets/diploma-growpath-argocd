@@ -30,22 +30,16 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
 {{- end -}}
 
-{{/* Settings that go into the ConfigMap: env plus the OTEL_* variables when tracing is on. */}}
 {{- define "growpath.configData" -}}
 {{- $data := dict -}}
 {{- range $key, $value := .Values.env -}}
 {{- $_ := set $data $key (toString $value) -}}
 {{- end -}}
-{{- if .Values.otel.enabled -}}
-{{- $_ := set $data "OTEL_SERVICE_NAME" (include "growpath.fullname" .) -}}
-{{- $_ := set $data "OTEL_EXPORTER_OTLP_ENDPOINT" (required "otel.endpoint is required when otel.enabled" .Values.otel.endpoint) -}}
-{{- $_ := set $data "OTEL_EXPORTER_OTLP_PROTOCOL" .Values.otel.protocol -}}
-{{- end -}}
 {{- toYaml $data -}}
 {{- end -}}
 
 {{- define "growpath.hasConfig" -}}
-{{- if or .Values.env .Values.otel.enabled -}}true{{- end -}}
+{{- if .Values.env -}}true{{- end -}}
 {{- end -}}
 
 {{- define "growpath.envFrom" -}}
