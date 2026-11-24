@@ -10,6 +10,7 @@ spec:
   sourceRepos:
     - https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
     - https://argoproj.github.io/argo-helm
+    - https://aws.github.io/eks-charts
     - public.ecr.aws/karpenter
   destinations:
     - server: https://kubernetes.default.svc
@@ -29,3 +30,11 @@ spec:
       kind: NodePool
     - group: karpenter.k8s.aws
       kind: EC2NodeClass
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+    - group: networking.k8s.io
+      kind: IngressClass
+    - group: elbv2.k8s.aws
+      kind: IngressClassParams
