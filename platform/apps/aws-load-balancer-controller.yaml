@@ -35,3 +35,5 @@ spec:
         maxDuration: 3m
     syncOptions:
       - ServerSideApply=true
+      # IngressClassParams arrives in the same sync as its CRD, so the dry-run cannot find the kind yet.
+      - SkipDryRunOnMissingResource=true
