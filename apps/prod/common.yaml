@@ -1,2 +1,9 @@
+# Temporary until the diploma defense: one replica on one cheap node, no spread.
+# Restore replicaCount 2 and spread to get availability back.
+replicaCount: 1
+spread:
+  nodes: false
+  zones: false
+
 ingress:
   securityGroups: sg-07c165f5e04fbffbd
