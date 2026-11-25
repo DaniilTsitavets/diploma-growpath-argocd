@@ -73,8 +73,7 @@ containerSecurityContext:
     drop:
       - ALL
 
-nodeSelector:
-  kubernetes.io/arch: amd64
+nodeSelector: {}
 tolerations: []
 affinity: {}
 spread:
