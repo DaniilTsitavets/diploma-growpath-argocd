@@ -15,6 +15,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: {{ .Values.ingress.healthcheckPath }}
     alb.ingress.kubernetes.io/security-groups: {{ required "ingress.securityGroups is required when ingress.enabled" .Values.ingress.securityGroups }}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   rules:
