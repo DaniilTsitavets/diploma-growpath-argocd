@@ -1,16 +1,16 @@
 image:
-  repository: <PROD_ACCOUNT_ID>.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
+  repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
   tag: "0000000000000000000000000000000000000000"
 
 env:
   PLANT_CARE_AWS_REGION: eu-north-1
-  PLANT_CARE_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/plant-care-order-placed
-  PLANT_CARE_TICKET_EVENTS_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/plant-care-ticket-events
-  PLANT_CARE_ESCALATION_TOPIC_ARN: arn:aws:sns:eu-north-1:<PROD_ACCOUNT_ID>:escalation-requested
+  PLANT_CARE_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/056816919483/plant-care-order-placed
+  PLANT_CARE_TICKET_EVENTS_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/056816919483/plant-care-ticket-events
+  PLANT_CARE_ESCALATION_TOPIC_ARN: arn:aws:sns:eu-north-1:056816919483:escalation-requested
   PLANT_CARE_ENTITLEMENT_URL: http://entitlement.growpath-services.svc:8000
   PLANT_CARE_MODEL_PROVIDER: bedrock
   PLANT_CARE_BEDROCK_MODEL_ID: eu.anthropic.claude-haiku-5-5
-  PLANT_CARE_PHOTOS_BUCKET: <PHOTOS_BUCKET>
+  PLANT_CARE_PHOTOS_BUCKET: growpath-prod-photos-056816919483
 
 externalSecret:
   key: growpath/plant-care
