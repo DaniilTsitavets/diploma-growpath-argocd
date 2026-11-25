@@ -1,0 +1,26 @@
+# One-off knowledge base import for plant-care. There is no automated sync: the Job runs
+# only when Sync is pressed in the Argo CD UI, otherwise it would start with every plant-care release.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: plant-care-ingestion
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  project: services
+  source:
+    repoURL: https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+    targetRevision: main
+    path: charts/growpath
+    helm:
+      releaseName: plant-care-ingestion
+      valueFiles:
+        - ../../apps/prod/common.yaml
+        - ../../apps/prod/plant-care-ingestion.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: growpath-services
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
