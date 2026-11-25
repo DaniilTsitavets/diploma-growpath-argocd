@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: services
+  namespace: argocd
+  annotations:
+    # After the platform is healthy.
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - env: prod
+                  namespace: growpath-services
+          - list:
+              elements:
+                - service: commerce
+                - service: entitlement
+                - service: plant-care
+                - service: expert-consultation
+  template:
+    metadata:
+      name: '{{ .service }}-{{ .env }}'
+    spec:
+      project: services
+      source:
+        repoURL: https://github.com/DaniilTsitavets/diploma-growpath-argocd.git
+        targetRevision: main
+        path: charts/growpath
+        helm:
+          # The release name is the service name: it names the Deployment, Service and ServiceAccount.
+          releaseName: '{{ .service }}'
+          valueFiles:
+            - '../../apps/base/{{ .service }}.yaml'
+            - '../../apps/{{ .env }}/common.yaml'
+            - '../../apps/{{ .env }}/{{ .service }}.yaml'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .namespace }}'
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jqPathExpressions:
+            - '.spec.template.metadata.annotations."reloader.stakater.com/last-reloaded-from"'
+      syncPolicy:
+        managedNamespaceMetadata:
+          labels:
+            pod-security.kubernetes.io/warn: restricted
+            pod-security.kubernetes.io/audit: restricted
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 3m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
