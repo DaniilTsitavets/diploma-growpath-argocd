@@ -1,6 +1,6 @@
 image:
   repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
-  tag: "c051766f4128"
+  tag: "a48b492019ac"
 env:
   PLANT_CARE_AWS_REGION: eu-north-1
   PLANT_CARE_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/056816919483/plant-care-order-placed

@@ -1,14 +1,10 @@
 mode: job
-
 image:
   repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
-  tag: "c051766f4128"
-
+  tag: "a48b492019ac"
 workingDir: /srv/services/plant-care
-
 externalSecret:
   key: growpath/plant-care
-
 job:
   command:
     - python
