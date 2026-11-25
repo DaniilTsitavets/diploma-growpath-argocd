@@ -37,11 +37,11 @@ reloader:
 
 resources:
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 25m
+    memory: 128Mi
   limits:
     cpu: "1"
-    memory: 256Mi
+    memory: 128Mi
 
 probes:
   startup:
@@ -105,8 +105,8 @@ migration:
   backoffLimit: 2
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 25m
+      memory: 128Mi
     limits:
       cpu: "1"
       memory: 256Mi
@@ -122,8 +122,8 @@ job:
   backoffLimit: 0
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 25m
+      memory: 96Mi
     limits:
       cpu: "1"
-      memory: 256Mi
+      memory: 192Mi
