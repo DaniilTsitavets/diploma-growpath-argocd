@@ -3,11 +3,11 @@ env:
 
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 50m
+    memory: 192Mi
   limits:
     cpu: "1"
-    memory: 512Mi
+    memory: 192Mi
 
 ingress:
   enabled: true
