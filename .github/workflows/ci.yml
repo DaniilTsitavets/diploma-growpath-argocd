@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  HELM_VERSION: v4.3.2
+  KUBECONFORM_VERSION: v0.8.0
+  KUBECONFORM_SHA256: 9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883
+  YAMLLINT_VERSION: 1.38.0
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  yaml:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pipx install "yamllint==${YAMLLINT_VERSION}"
+      - run: .github/scripts/validate.sh yaml
+
+  chart:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+        with:
+          version: ${{ env.HELM_VERSION }}
+      - run: .github/scripts/install-kubeconform.sh
+      - run: .github/scripts/validate.sh chart
+
+  manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: .github/scripts/install-kubeconform.sh
+      - run: .github/scripts/validate.sh manifests
+
+  ci:
+    if: always()
+    needs: [yaml, chart, manifests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail when a job failed or was cancelled; skipped jobs are fine
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: $RESULTS"
+          case " $RESULTS " in *" failure "* | *" cancelled "*) exit 1 ;; esac
