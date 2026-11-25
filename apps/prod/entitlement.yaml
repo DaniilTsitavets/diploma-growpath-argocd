@@ -1,6 +1,6 @@
 image:
   repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/entitlement
-  tag: "c051766f4128"
+  tag: "a48b492019ac"
 env:
   ENTITLEMENT_AWS_REGION: eu-north-1
   ENTITLEMENT_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/056816919483/entitlement-order-placed
