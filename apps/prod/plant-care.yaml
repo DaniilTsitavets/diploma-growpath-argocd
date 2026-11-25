@@ -1,7 +1,6 @@
 image:
   repository: <PROD_ACCOUNT_ID>.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
-  tag: "0000000000000000000000000000000000000000"
-
+  tag: "b2c826065bbf"
 env:
   PLANT_CARE_AWS_REGION: eu-north-1
   PLANT_CARE_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/plant-care-order-placed
@@ -11,6 +10,5 @@ env:
   PLANT_CARE_MODEL_PROVIDER: bedrock
   PLANT_CARE_BEDROCK_MODEL_ID: eu.anthropic.claude-haiku-5-5
   PLANT_CARE_PHOTOS_BUCKET: <PHOTOS_BUCKET>
-
 externalSecret:
   key: growpath/plant-care
