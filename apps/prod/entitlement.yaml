@@ -1,11 +1,9 @@
 image:
   repository: <PROD_ACCOUNT_ID>.dkr.ecr.eu-north-1.amazonaws.com/growpath/entitlement
-  tag: "0000000000000000000000000000000000000000"
-
+  tag: "b2c826065bbf"
 env:
   ENTITLEMENT_AWS_REGION: eu-north-1
   ENTITLEMENT_ORDER_PLACED_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/entitlement-order-placed
   ENTITLEMENT_TICKET_EVENTS_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/<PROD_ACCOUNT_ID>/entitlement-ticket-events
-
 externalSecret:
   key: growpath/entitlement
