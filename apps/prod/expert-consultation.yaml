@@ -1,6 +1,6 @@
 image:
   repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/expert-consultation
-  tag: "c051766f4128"
+  tag: "a48b492019ac"
 env:
   EXPERT_CONSULTATION_AWS_REGION: eu-north-1
   EXPERT_CONSULTATION_ESCALATION_QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/056816919483/expert-escalation-requested
