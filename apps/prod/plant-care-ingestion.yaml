@@ -1,0 +1,24 @@
+mode: job
+
+image:
+  repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/plant-care
+  tag: "c051766f4128"
+
+workingDir: /srv/services/plant-care
+
+externalSecret:
+  key: growpath/plant-care
+
+job:
+  command:
+    - python
+    - -m
+    - app.knowledge_import
+  # The import parses documents; the peak memory is unknown, so the limit has headroom.
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
