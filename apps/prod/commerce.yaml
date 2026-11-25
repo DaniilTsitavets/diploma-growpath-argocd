@@ -1,10 +1,8 @@
 image:
   repository: 056816919483.dkr.ecr.eu-north-1.amazonaws.com/growpath/commerce
-  tag: "0000000000000000000000000000000000000000"
-
+  tag: "c051766f4128"
 env:
   COMMERCE_AWS_REGION: eu-north-1
   COMMERCE_ORDER_PLACED_TOPIC_ARN: arn:aws:sns:eu-north-1:056816919483:order-placed
-
 externalSecret:
   key: growpath/commerce
